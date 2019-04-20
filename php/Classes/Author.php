@@ -28,7 +28,39 @@ class Author {
 	private $authorActivationToken;
 	/**
 	 * email for this Author; this is a unique index
-	 * @var string $
+	 * @var string $authorEmail
+	 **/
+	private $authorEmail;
+	/**
+	 * hash for profile password
+	 * @var $authorhash
+	**/
+	private $authorHash;
+	/**
+	 * phone number for this Author
+	 * @var string $profilePhone
+	 **/
+	private $authorPhone;
+	/**
+	 *salt for author password
+	 *
+	 * @var $authorSalt
+	 * /
+	private $profileSalt;
+
+	/**
+	 * accessor method for author id
+	 *
+	 * @return Uuid value of author id (or null if new Author)
+	 **/
+	public function getAuthorId(): Uuid {
+			  return ($this->authorId);
+	}
+	/**
+	 * mutator method for author id
+	 *
+	 * @param Uuid| string $newAuthorId value of new author id
+	 * @throws \RangeException if $newAuthorId value of new author id
 
 	 */
 }
