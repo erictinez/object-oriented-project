@@ -45,8 +45,8 @@ class Author {
 	 *salt for author password
 	 *
 	 * @var $authorSalt
-	 * /
-	private $profileSalt;
+	 */
+	private $authorSalt;
 
 	/**
 	 * accessor method for author id
@@ -60,7 +60,34 @@ class Author {
 	 * mutator method for author id
 	 *
 	 * @param Uuid| string $newAuthorId value of new author id
-	 * @throws \RangeException if $newAuthorId value of new author id
+	 * @throws \RangeException if $newAuthorId value is not positive
+	 * @throws /TypeError if the author id is not
+	 **/
+	public function setAuthorId( $newProfileId): void {
+		try{
+				$uuid = self::validateUuid($newAuthorId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+				  $exceptionType = get_class($exception);
+				  throw(new $exceptionType($exception->gertMessage(), 0, $exception));
+		}
+		/**
+		 * accessor method for account activation token
+		 *
+		 * @return string value of the activation token
+		 *
+		 */
+		public function getAuthorActivationToken() : ?string {
+				  return ($this->authorActivationToken);
+		}
+		/**
+		 * mutator method for account activation token
+		 *
+		 * @param string $newAuthorActivationToken
+		 * @throws \InvalidArgumentException if the token is not a string or insecure
+		 *@throws \RangeException if the token is not exactly n32 characters
+		 *@throws \TypeError if the activation token is not a string
+		 */
+	}
 
 	 */
 }
