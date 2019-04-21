@@ -189,45 +189,57 @@ class Author {
 	 * @throws \RangeException if the hash is not 128 characters
 	 * @throws \TypeError if profile hash is not a string
 	 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	public function setAuthorHash(string $newAuthorHash): void {
+		//enforce that the hash is properly formatted
+		$newAuthorHash = trim($newAuthorHash);
+		if(empty($newAuthorHash) === true) {
+			throw(new \InvalidArgumentException("author password hash empty or insecure"));
 		}
+		//enforce the hash is really an Argon hash
+		$authorHashInfo = password_get_info($newAuthorHash);
+		if($authorHashInfo["algoName"] !== "argon2i") {
+			throw(new \InvalidArgumentException("author hash is not a valid hash"));
+		}
+		//enforce that the hash is exactly 97 characters.
+		if(strlen($newAuthorHash) !== 97) {
+			throw(new \RangeException("author hash must be 97 characters"));
+		}
+		//store the hash
+		$this->authorHash = $newAuthorHash;
 	}
-
-	 */
+	/**
+	 * accessor method for phone
+	 *
+	 * @return string value of phone or null
+	 **/
+	public function getAuthorPhone(): ?string {
+		return ($this->authorPhone);
+	}
+	/**
+	 * mutator method for phone
+	 *
+	 * @param string $newAuthorPhone new value of phone
+	 * @throws \InvalidArgumentException if $newPhone is not a string or insecure
+	 * @throws \RangeException if $newPhone is > 32 characters
+	 * @throws \TypeError if $newPhone is not a string
+	 **/
+	public function setAuthorPhone(?string $newAuthorPhone): void {
+		//if $authorPhone is null return it right away
+		if($newAuthorPhone === null) {
+			$this->authorPhone = null;
+			return;
+		}
+		// verify the phone is secure
+		$newAuthorPhone = trim($newAuthorPhone);
+		$newAuthorPhone = filter_var($newAuthorPhone, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newAuthorPhone) === true) {
+			throw(new \InvalidArgumentException("author phone is empty or insecure"));
+		}
+		// verify the phone will fit in the database
+		if(strlen($newAuthorPhone) > 32) {
+			throw(new \RangeException("author phone is too large"));
+		}
+		// store the phone
+		$this->authorPhone = $newAuthorPhone;
+	}
 }
