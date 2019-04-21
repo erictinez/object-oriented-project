@@ -82,11 +82,151 @@ class Author {
 		/**
 		 * mutator method for account activation token
 		 *
-		 * @param string $newAuthorActivationToken
-		 * @throws \InvalidArgumentException if the token is not a string or insecure
+		 *@param string $newAuthorActivationToken
+		 *@throws \InvalidArgumentException if the token is not a string or insecure
 		 *@throws \RangeException if the token is not exactly n32 characters
 		 *@throws \TypeError if the activation token is not a string
 		 */
+		public function setAuthorActivationToken(?string $newAuthorActivationToken): void {
+			if($newAuthorActivationToken === null) {
+				$this->authorActivationToken = null;
+				return;
+			}
+			$newAuthorActivationToken = strtolower(trim($newAuthorActivationToken));
+			if(ctype_xdigit($newAuthorActivationToken) === false) {
+				throw(new\RangeException("user activation is not valid"));
+			}
+			//make sure user activation token is only 32 characters
+			if(strlen($newProfileActivationToken) !== 32) {
+				throw(new\RangeException("user activation token has to be 32"));
+			}
+			$this->authorActivationToken = $newAuthorActivationToken;
+		}
+		$newAuthorActivationToken = strtolower(trim($newAuthorActivationToken));
+		if(ctype_xdigit($newAuthorActivationToken) === false) {
+			throw(new\RangeException("user activation is not valid"));
+		}
+		//make sure user activation token is only 32 characters
+		if(strlen($newAuthorActivationToken) !== 32) {
+			throw(new\RangeException("user activation token has to be 32"));
+		}
+		$this->authorActivationToken = $newAuthoreActivationToken;
+	}
+	/**
+	 * accessor method for at handle
+	 *
+	 * @return string value of at handle
+	 **/
+	public function getAuthorAtHandle(): string {
+		return ($this->authorAtHandle);
+	}
+	/**
+	 * mutator method for at handle
+	 *
+	 * @param string $newAuthorAtHandle new value of at handle
+	 * @throws \InvalidArgumentException if $newAtHandle is not a string or insecure
+	 * @throws \RangeException if $newAtHandle is > 32 characters
+	 * @throws \TypeError if $newAtHandle is not a string
+	 **/
+	public function setAuthorAtHandle(string $newAuthorAtHandle) : void {
+		// verify the at handle is secure
+		$newAuthorAtHandle = trim($newAuthorAtHandle);
+		$newAuthorAtHandle = filter_var($newAuthorAtHandle, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newAuthorAtHandle) === true) {
+			throw(new \InvalidArgumentException("author at handle is empty or insecure"));
+		}
+		// verify the at handle will fit in the database
+		if(strlen($newAuthorAtHandle) > 32) {
+			throw(new \RangeException("author at handle is too large"));
+		}
+		// store the at handle
+		$this->authorAtHandle = $newAuthorAtHandle;
+	}
+	/**
+	 * accessor method for email
+	 *
+	 * @return string value of email
+	 **/
+	public function getAuthorEmail(): string {
+		return $this->aurthorEmail;
+	}
+	/**
+	 * mutator method for email
+	 *
+	 * @param string $newAuthorEmail new value of email
+	 * @throws \InvalidArgumentException if $newEmail is not a valid email or insecure
+	 * @throws \RangeException if $newEmail is > 128 characters
+	 * @throws \TypeError if $newEmail is not a string
+	 **/
+	public function setAuthorEmail(string $newAuthorEmail): void {
+		// verify the email is secure
+		$newAuthorEmail = trim($newAuthorEmail);
+		$newAuthorEmail = filter_var($newAuthorEmail, FILTER_VALIDATE_EMAIL);
+		if(empty($newAuthorEmail) === true) {
+			throw(new \InvalidArgumentException("author email is empty or insecure"));
+		}
+		// verify the email will fit in the database
+		if(strlen($newAuthorEmail) > 128) {
+			throw(new \RangeException("author email is too large"));
+		}
+		// store the email
+		$this->authorEmail = $newAuthorEmail;
+	}
+	/**
+	 * accessor method for authorHash
+	 *
+	 * @return string value of hash
+	 */
+	public function getAuthorHash(): string {
+		return $this->authorHash;
+	}
+
+	/**
+	 * mutator method for author hash password
+	 *
+	 * @param string $newAuthorHash
+	 * @throws \InvalidArgumentException if the hash is not secure
+	 * @throws \RangeException if the hash is not 128 characters
+	 * @throws \TypeError if profile hash is not a string
+	 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+		}
 	}
 
 	 */
