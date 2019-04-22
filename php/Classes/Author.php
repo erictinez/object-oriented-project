@@ -61,7 +61,7 @@ class Author {
 	 *
 	 * @param Uuid| string $newAuthorId value of new author id
 	 * @throws \RangeException if $newAuthorId value is not positive
-	 * @throws /TypeError if the author id is not
+	 * @throws \TypeError if the author id is not
 	 **/
 	public function setAuthorId( $newAuthorId): void {
 		try {
@@ -142,7 +142,7 @@ class Author {
 	 * @return string value of email
 	 **/
 	public function getAuthorEmail(): string {
-		return $this->aurthorEmail;
+		return $this->authorEmail;
 	}
 	/**
 	 * mutator method for email
