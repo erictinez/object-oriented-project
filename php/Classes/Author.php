@@ -9,7 +9,7 @@ use Ramsey\Uuid\Uuid;
  * Cross Section of a Author
  *
  * This is a cross section of what is probably stored about a author. This entity is a top level entity that
- * holds the keys to the other entities in this example (i.e., Favorite and Profile).
+ * holds the keys to the other entities in this example (i.e., Favorite and Author).
  *
  * @author Eric martinez <emartinez451@cnm.eduu>
  * @version 1.0.0
@@ -32,13 +32,13 @@ class Author {
 	 **/
 	private $authorEmail;
 	/**
-	 * hash for profile password
+	 * hash for author password
 	 * @var $authorhash
 	**/
 	private $authorHash;
 	/**
 	 * phone number for this Author
-	 * @var string $profilePhone
+	 * @var string $authorPhone
 	 **/
 	private $authorPhone;
 	/**
@@ -63,13 +63,17 @@ class Author {
 	 * @throws \RangeException if $newAuthorId value is not positive
 	 * @throws /TypeError if the author id is not
 	 **/
-	public function setAuthorId( $newProfileId): void {
-		try{
-				$uuid = self::validateUuid($newAuthorId);
+	public function setAuthorId( $newAuthorId): void {
+		try {
+			$uuid = self::validateUuid($newAuthorId);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
-				  $exceptionType = get_class($exception);
-				  throw(new $exceptionType($exception->gertMessage(), 0, $exception));
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
+		// convert and store the author id
+		$this->authorId = $uuid;
+	}
+
 		/**
 		 * accessor method for account activation token
 		 *
@@ -97,21 +101,11 @@ class Author {
 				throw(new\RangeException("user activation is not valid"));
 			}
 			//make sure user activation token is only 32 characters
-			if(strlen($newProfileActivationToken) !== 32) {
+			if(strlen($newAuthorActivationToken) !== 32) {
 				throw(new\RangeException("user activation token has to be 32"));
 			}
 			$this->authorActivationToken = $newAuthorActivationToken;
 		}
-		$newAuthorActivationToken = strtolower(trim($newAuthorActivationToken));
-		if(ctype_xdigit($newAuthorActivationToken) === false) {
-			throw(new\RangeException("user activation is not valid"));
-		}
-		//make sure user activation token is only 32 characters
-		if(strlen($newAuthorActivationToken) !== 32) {
-			throw(new\RangeException("user activation token has to be 32"));
-		}
-		$this->authorActivationToken = $newAuthoreActivationToken;
-	}
 	/**
 	 * accessor method for at handle
 	 *
@@ -187,7 +181,7 @@ class Author {
 	 * @param string $newAuthorHash
 	 * @throws \InvalidArgumentException if the hash is not secure
 	 * @throws \RangeException if the hash is not 128 characters
-	 * @throws \TypeError if profile hash is not a string
+	 * @throws \TypeError if author hash is not a string
 	 */
 	public function setAuthorHash(string $newAuthorHash): void {
 		//enforce that the hash is properly formatted
