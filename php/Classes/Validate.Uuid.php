@@ -1,5 +1,5 @@
 <?php
-namespace emartinez451\objectOrientedProject;
+namespace emartinez451\ObjectOrientedProject;
 require_once(dirname(__DIR__, 2) . "/vendor/autoload.php");
 use Ramsey\Uuid\Uuid;
 /**

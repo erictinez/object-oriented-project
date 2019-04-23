@@ -1,5 +1,5 @@
 <?php
-namespace emartinez451\objectOrientedProject;
+namespace emartinez451\ObjectOrientedProject;
 /**
  * Trait to Validate a mySQL Date
  *
