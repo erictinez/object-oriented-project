@@ -2,7 +2,7 @@
 
 namespace Emartinez451\ObjectOrientedProject;
 
-
+require_once("autoload.php");
 require_once(dirname(__DIR__) . "/vendor/autoload.php");
 
 use Ramsey\Uuid\Uuid;
@@ -141,7 +141,7 @@ class Author {
 	public function setAuthorAvatarUrl(string $newAuthorAvatarUrl): void {
 		// verify that the Url is secure
 		$newAuthorAvatarUrl = trim($newAuthorAvatarUrl);
-		$newAuthorAvatarUrl = filter_var($newAuthorAvatarUrl, FILTER_SANITIZE_STRING, FILTER_FLAGNO_ENCODE_QUOTES);
+		$newAuthorAvatarUrl = filter_var($newAuthorAvatarUrl, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newAuthorAvatarUrl) === true) {
 			throw(new \InvalidArgumentException("author url is empty or insecure"));
 		}
