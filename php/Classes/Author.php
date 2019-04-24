@@ -2,17 +2,12 @@
 
 namespace Edu\emartinez451\ObjectOrientedProject;
 
-require_once(dirname(__DIR__, 2) . "/vendor/autoload.php");
+
+require_once(dirname(__DIR__) . "/vendor/autoload.php");
 
 use Ramsey\Uuid\Uuid;
 /**
- * Cross Section of a Author
- *
- * This is a cross section of what is probably stored about a author. This entity is a top level entity that
- * holds the keys to the other entities in this example (i.e., Favorite and Author).
- *
- * @author Eric martinez <emartinez451@cnm.eduu>
- * @version 1.0.0
+ *@author Eric Martinez <emartinez451@cnm.edu>
  **/
 class Author {
 	use ValidateUuid;
@@ -27,35 +22,61 @@ class Author {
 	 **/
 	private $authorActivationToken;
 	/**
+	 *
+	 *
+	 **/
+	private $authorAvatarUrl;
+	/**
 	 * email for this Author; this is a unique index
 	 * @var string $authorEmail
 	 **/
 	private $authorEmail;
 	/**
 	 * hash for author password
-	 * @var $authorhash
+	 * @var $authorHash
 	**/
 	private $authorHash;
 	/**
-	 * phone number for this Author
-	 * @var string $authorPhone
+	 * * username for this author
+	 * @var string for $authorUserName
 	 **/
-	private $authorPhone;
+	private $authorUsername;
 	/**
-	 *salt for author password
-	 *
+	 * salt for author password
 	 * @var $authorSalt
-	 */
+	 **/
 	private $authorSalt;
 
 	/**
-	 * accessor method for author id
+	 * constructor for author
 	 *
-	 * @return Uuid value of author id (or null if new Author)
-	 **/
+	 *
+	 */
+
+	public function __construct(string $newAuthorId, string $newauthorAvatarUrl, string $newAuthorActivationToken, string $newAuthorEmail, string $newAuthorUsername, string $newAuthorHash) {
+		try {
+			$this->setAuthorId($newAuthorId);
+			$this->setAuthorAvatarUrl($newauthorAvatarUrl);
+			$this->setAuthorActivationToken($newAuthorActivationToken);
+			$this->setAuthorEmail($newAuthorEmail);
+			$this->setAuthorUsername($newAuthorUsername);
+			$this->setAuthorHash($newAuthorHash);
+		}
+		catch(\InvalidArgumentException | \RangeException |\Exception | \TypeError $exception) {
+			echo "Try Again";
+		}
+	}
+
+
+	/**
+	 * accessor method for authorId
+	 * @return Uuid value of authorId (or null if new Author)
+	 */
+
 	public function getAuthorId(): Uuid {
 			  return ($this->authorId);
 	}
+
 	/**
 	 * mutator method for author id
 	 *
@@ -63,10 +84,12 @@ class Author {
 	 * @throws \RangeException if $newAuthorId value is not positive
 	 * @throws \TypeError if the author id is not
 	 **/
+
 	public function setAuthorId( $newAuthorId): void {
 		try {
 			$uuid = self::validateUuid($newAuthorId);
 		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+
 			$exceptionType = get_class($exception);
 			throw(new $exceptionType($exception->getMessage(), 0, $exception));
 		}
@@ -106,36 +129,30 @@ class Author {
 			}
 			$this->authorActivationToken = $newAuthorActivationToken;
 		}
+
 	/**
-	 * accessor method for at handle
+	 * accessor method for avatar url
 	 *
-	 * @return string value of at handle
-	 **/
-	public function getAuthorAtHandle(): string {
-		return ($this->authorAtHandle);
-	}
-	/**
-	 * mutator method for at handle
-	 *
-	 * @param string $newAuthorAtHandle new value of at handle
-	 * @throws \InvalidArgumentException if $newAtHandle is not a string or insecure
-	 * @throws \RangeException if $newAtHandle is > 32 characters
-	 * @throws \TypeError if $newAtHandle is not a string
-	 **/
-	public function setAuthorAtHandle(string $newAuthorAtHandle) : void {
-		// verify the at handle is secure
-		$newAuthorAtHandle = trim($newAuthorAtHandle);
-		$newAuthorAtHandle = filter_var($newAuthorAtHandle, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newAuthorAtHandle) === true) {
-			throw(new \InvalidArgumentException("author at handle is empty or insecure"));
+	 * @param string $newAuthorAvatarUrl
+	 * @throws \InvalidArgumentException if $newAvatarUrl is not a string or insecure
+	 * @throws \RangeException if $newAvatarUrl is > 32 characters
+	 * @throws \TypeError if $newAvatarUrl is not a string
+	 */
+	public function setAuthorAvatarUrl(string $newAuthorAvatarUrl): void {
+		// verify that the Url is secure
+		$newAuthorAvatarUrl = trim($newAuthorAvatarUrl);
+		$newAuthorAvatarUrl = filter_var($newAuthorAvatarUrl, FILTER_SANITIZE_STRING, FILTER_FLAGNO_ENCODE_QUOTES);
+		if(empty($newAuthorAvatarUrl) === true) {
+			throw(new \InvalidArgumentException("author url is empty or insecure"));
 		}
-		// verify the at handle will fit in the database
-		if(strlen($newAuthorAtHandle) > 32) {
-			throw(new \RangeException("author at handle is too large"));
+		// verify the url will fit in the database
+		if(strlen($newAuthorAvatarUrl) > 32) {
+			throw(new \rangeException("author url is too large"));
 		}
-		// store the at handle
-		$this->authorAtHandle = $newAuthorAtHandle;
+		//store the url
+		$this->authorAvatarUrl = $newAuthorAvatarUrl;
 	}
+
 	/**
 	 * accessor method for email
 	 *
@@ -144,6 +161,7 @@ class Author {
 	public function getAuthorEmail(): string {
 		return $this->authorEmail;
 	}
+
 	/**
 	 * mutator method for email
 	 *
@@ -166,6 +184,7 @@ class Author {
 		// store the email
 		$this->authorEmail = $newAuthorEmail;
 	}
+
 	/**
 	 * accessor method for authorHash
 	 *
@@ -201,39 +220,41 @@ class Author {
 		//store the hash
 		$this->authorHash = $newAuthorHash;
 	}
+
 	/**
-	 * accessor method for phone
+	 * accessor method for username
 	 *
-	 * @return string value of phone or null
+	 * @return string value of username or null
 	 **/
-	public function getAuthorPhone(): ?string {
-		return ($this->authorPhone);
+	public function getAuthorUsername(): ?string {
+		return ($this->authorUsername);
 	}
 	/**
-	 * mutator method for phone
+	 * mutator method for username
 	 *
-	 * @param string $newAuthorPhone new value of phone
-	 * @throws \InvalidArgumentException if $newPhone is not a string or insecure
-	 * @throws \RangeException if $newPhone is > 32 characters
-	 * @throws \TypeError if $newPhone is not a string
-	 **/
-	public function setAuthorPhone(?string $newAuthorPhone): void {
-		//if $authorPhone is null return it right away
-		if($newAuthorPhone === null) {
-			$this->authorPhone = null;
+	 * @param string $newAuthorUsername new value of username
+	 * @throws \InvalidArgumentException if $newUsername is not a string or insecure
+	 * @throws \RangeException if $newUsername is > 32 characters
+	 * @throws \TypeError if $newUsername is not a string
+	 */
+	public function setAuthorUsername(?string $newAuthorUsername): void {
+		//if $authorUsername is null return it right away
+		if($newAuthorUsername === null) {
+			$this->authorUsername = null;
 			return;
 		}
-		// verify the phone is secure
-		$newAuthorPhone = trim($newAuthorPhone);
-		$newAuthorPhone = filter_var($newAuthorPhone, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newAuthorPhone) === true) {
-			throw(new \InvalidArgumentException("author phone is empty or insecure"));
+		// verify the username is secure
+		$newAuthorUsername = trim($newAuthorUsername);
+		$newAuthorUsername = filter_var($newAuthorUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newAuthorUsername) === true) {
+			throw(new \InvalidArgumentException("author username is empty or insecure"));
 		}
-		// verify the phone will fit in the database
-		if(strlen($newAuthorPhone) > 32) {
-			throw(new \RangeException("author phone is too large"));
+		// verify the username will fit in the database
+		if(strlen($newAuthorUsername) > 32) {
+			throw(new \RangeException("author username is too large"));
 		}
-		// store the phone
-		$this->authorPhone = $newAuthorPhone;
+		// store the username
+		$this->authorUsername = $newAuthorUsername;
 	}
 }
+
