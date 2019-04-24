@@ -1,13 +1,13 @@
 <?php
 
-namespace emartinez451\ObjectOrientedProject;
+namespace Emartinez451\ObjectOrientedProject;
 
 
 require_once(dirname(__DIR__) . "/vendor/autoload.php");
 
 use Ramsey\Uuid\Uuid;
 /**
- *@author Eric Martinez <emartinez451@cnm.edu>
+ *@author Eric Martinez <Emartinez451@cnm.edu>
  **/
 class Author {
 	use ValidateUuid;
@@ -257,4 +257,5 @@ class Author {
 		$this->authorUsername = $newAuthorUsername;
 	}
 }
+
 

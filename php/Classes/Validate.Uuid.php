@@ -1,5 +1,5 @@
 <?php
-namespace emartinez451\ObjectOrientedProject;
+namespace Emartinez451\ObjectOrientedProject;
 require_once(dirname(__DIR__) . "/vendor/autoload.php");
 use Ramsey\Uuid\Uuid;
 /**
@@ -11,7 +11,7 @@ use Ramsey\Uuid\Uuid;
  * 2. binary string (16 bytes)
  * 3. Ramsey\Uuid\Uuid object
  *
- * @author Eric Martinez <emartinez451@cnm.edu>
+ * @author Eric Martinez <Emartinez451@cnm.edu>
  * @package Edu\Cnm\Misquote
  **/
 trait ValidateUuid {
