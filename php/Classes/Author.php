@@ -1,6 +1,6 @@
 <?php
 
-namespace Edu\emartinez451\ObjectOrientedProject;
+namespace emartinez451\ObjectOrientedProject;
 
 
 require_once(dirname(__DIR__) . "/vendor/autoload.php");
