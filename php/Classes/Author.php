@@ -310,6 +310,86 @@ public function update(\PDO $pdo) : void {
 	$parameters = ["authorId" => $this->authorId->getBytes(),"authorProfileId" => $this->authorProfileId->getBytes(), "authorContent" => $this->authorContent, "authorDate" => $formattedDate];
 	$statement->execute($parameters);
 }
+/**
+ * gets the Author by authorId
+ *
+ * @param \PDO $pdo PDO connection object
+ * @param Uuid|string $authorId author id to search for
+ * @return Author|null Author found or null if not found
+ * @throws \PDOException when mySQL related errors occur
+ * @throws \TypeError when a variable are not the correct data type
+ **/
+public static function getAuthorByAuthorId(\PDO $pdo, $authorId) : ?Author {
+	// sanitize the authorId before searching
+	try {
+		$authorId = self::validateUuid($authorId);
+	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+		throw(new \PDOException($exception->getMessage(), 0, $exception));
+	}
+	// create query template
+	$query = "SELECT aurthorId, authorProfileId, authorContent, authorDate FROM author WHERE autghorId = :authorId";
+	$statement = $pdo->prepare($query);
+
+	// bind the author id to the place holder in the template
+	$parameters = ["authorId" => $authorId->getBytes()];
+	$statement->execute($parameters);
+
+	// grab the author from mySQL
+	try {
+		$author = null;
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		$row = $statement->fetch();
+		if($row !== false) {
+			$author = new author($row["authorId"], $row["authorProfileId"], $row["authorContent"], $row["authorDate"]);
+		}
+	} catch(\Exception $exception) {
+		// if the row couldn't be converted, rethrow it
+		throw(new \PDOException($exception->getMessage(), 0, $exception));
+	}
+	return($author);
+}
+/**
+ * gets the Author by profile id
+ *
+ * @param \PDO $pdo PDO connection object
+ * @param Uuid|string $authorProfileId profile id to search by
+ * @return \SplFixedArray SplFixedArray of Tweets found
+ * @throws \PDOException when mySQL related errors occur
+ * @throws \TypeError when variables are not the correct data type
+ **/
+public static function getAuthorByTweetProfileId(\PDO $pdo, $authorProfileId) : \SplFixedArray {
+
+	try {
+		$authorProfileId = self::validateUuid($authorProfileId);
+	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+		throw(new \PDOException($exception->getMessage(), 0, $exception));
+	}
+
+	// create query template
+	$query = "SELECT authorId, authorProfileId, authorContent, authorDate FROM author WHERE authorProfileId = :authorProfileId";
+	$statement = $pdo->prepare($query);
+	// bind the author profile id to the place holder in the template
+	$parameters = ["authorProfileId" => $authorProfileId->getBytes()];
+	$statement->execute($parameters);
+	// build an array of authors
+	$authors = new \SplFixedArray($statement->rowCount());
+	$statement->setFetchMode(\PDO::FETCH_ASSOC);
+	while(($row = $statement->fetch()) !== false) {
+		try {
+			$author = new Author($row["authorId"], $row["authorProfileId"], $row["authorContent"], $row["authorDate"]);
+			$tauthor[$author->key()] = $author;
+			$authors->next();
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+	}
+	return($authors);
+}
+
+
+
+
 
 
 
