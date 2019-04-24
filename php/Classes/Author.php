@@ -257,5 +257,61 @@ class Author {
 		$this->authorUsername = $newAuthorUsername;
 	}
 }
+/**
+ * inserts this Author into mySQL
+ *
+ * @param \PDO $pdo PDO connection object
+ * @throws \PDOException when mySQL related errors occur
+ * @throws \TypeError if $pdo is not a PDO connection object
+ **/
+public function insert(\PDO $pdo) : void {
+
+	// create query template
+	$query = "INSERT INTO author(authorId,authorProfileId, authorContent, authortDate) VALUES(:authorId, :authorProfileId, :authorContent, :authorDate)";
+	$statement = $pdo->prepare($query);
+
+	// bind the member variables to the place holders in the template
+	$formattedDate = $this->authorDate->format("Y-m-d H:i:s.u");
+	$parameters = ["authorId" => $this->authorId->getBytes(), "authorProfileId" => $this->authorProfileId->getBytes(), "authorContent" => $this->authorContent, "authorDate" => $formattedDate];
+	$statement->execute($parameters);
+}
+/**
+ * deletes this Author from mySQL
+ *
+ * @param \PDO $pdo PDO connection object
+ * @throws \PDOException when mySQL related errors occur
+ * @throws \TypeError if $pdo is not a PDO connection object
+ **/
+public function delete(\PDO $pdo) : void {
+
+	// create query template
+	$query = "DELETE FROM author WHERE authorId = :aurthorId";
+	$statement = $pdo->prepare($query);
+
+	// bind the member variables to the place holder in the template
+	$parameters = ["authorId" => $this->authorId->getBytes()];
+	$statement->execute($parameters);
+}
+/**
+ * updates this Author in mySQL
+ *
+ * @param \PDO $pdo PDO connection object
+ * @throws \PDOException when mySQL related errors occur
+ * @throws \TypeError if $pdo is not a PDO connection object
+ **/
+public function update(\PDO $pdo) : void {
+
+	// create query template
+	$query = "UPDATE author SET authorProfileId = :authorProfileId, authorContent = :authorContent, authorDate = :authorDate WHERE authorId = :authorId";
+	$statement = $pdo->prepare($query);
+
+
+	$formattedDate = $this->authorDate->format("Y-m-d H:i:s.u");
+	$parameters = ["authorId" => $this->authorId->getBytes(),"authorProfileId" => $this->authorProfileId->getBytes(), "authorContent" => $this->authorContent, "authorDate" => $formattedDate];
+	$statement->execute($parameters);
+}
+
+
+
 
 
