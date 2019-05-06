@@ -2,7 +2,7 @@
 
 namespace Emartinez451\ObjectOrientedProject;
 
-require_once("autoload.php");
+
 require_once(dirname(__DIR__) . "/vendor/autoload.php");
 
 use Ramsey\Uuid\Uuid;
@@ -101,11 +101,11 @@ class Author {
 		 * accessor method for account activation token
 		 *
 		 * @return string value of the activation token
-		 *
 		 */
 		public function getAuthorActivationToken() : ?string {
 				  return ($this->authorActivationToken);
 		}
+
 		/**
 		 * mutator method for account activation token
 		 *
@@ -129,6 +129,10 @@ class Author {
 			}
 			$this->authorActivationToken = $newAuthorActivationToken;
 		}
+
+	public function getAuthorAvatarUrl(): ?string {
+		return $this->authorAvatarUrl;
+	}
 
 	/**
 	 * accessor method for avatar url
@@ -157,7 +161,7 @@ class Author {
 	 * accessor method for email
 	 *
 	 * @return string value of email
-	 **/
+	 */
 	public function getAuthorEmail(): string {
 		return $this->authorEmail;
 	}
@@ -169,7 +173,7 @@ class Author {
 	 * @throws \InvalidArgumentException if $newEmail is not a valid email or insecure
 	 * @throws \RangeException if $newEmail is > 128 characters
 	 * @throws \TypeError if $newEmail is not a string
-	 **/
+	 */
 	public function setAuthorEmail(string $newAuthorEmail): void {
 		// verify the email is secure
 		$newAuthorEmail = trim($newAuthorEmail);
@@ -256,19 +260,18 @@ class Author {
 		// store the username
 		$this->authorUsername = $newAuthorUsername;
 	}
-}
+
 /**
  * inserts this Author into mySQL
- *
  * @param \PDO $pdo PDO connection object
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError if $pdo is not a PDO connection object
  **/
-public function insert(\PDO $pdo) : void {
+		public function insert(\PDO $pdo) : void {
 
 	// create query template
 	$query = "INSERT INTO author(authorId,authorProfileId, authorContent, authortDate) VALUES(:authorId, :authorProfileId, :authorContent, :authorDate)";
-	$statement = $pdo->prepare($query);
+						  $statement = $pdo->prepare($query);
 
 	// bind the member variables to the place holders in the template
 	$formattedDate = $this->authorDate->format("Y-m-d H:i:s.u");
@@ -310,6 +313,8 @@ public function update(\PDO $pdo) : void {
 	$parameters = ["authorId" => $this->authorId->getBytes(),"authorProfileId" => $this->authorProfileId->getBytes(), "authorContent" => $this->authorContent, "authorDate" => $formattedDate];
 	$statement->execute($parameters);
 }
+
+
 /**
  * gets the Author by authorId
  *
@@ -319,15 +324,18 @@ public function update(\PDO $pdo) : void {
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when a variable are not the correct data type
  **/
-public static function getAuthorByAuthorId(\PDO $pdo, $authorId) : ?Author {
+public static function getAuthorByAuthorId($authorId) : ?Author {
 	// sanitize the authorId before searching
 	try {
-		$authorId = self::validateUuid($authorId);
-	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$authorId = self::validateUuid($authorId);
+	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception)
+
+	{
 		throw(new \PDOException($exception->getMessage(), 0, $exception));
 	}
 	// create query template
 	$query = "SELECT aurthorId, authorProfileId, authorContent, authorDate FROM author WHERE autghorId = :authorId";
+
 	$statement = $pdo->prepare($query);
 
 	// bind the author id to the place holder in the template
@@ -348,36 +356,30 @@ public static function getAuthorByAuthorId(\PDO $pdo, $authorId) : ?Author {
 	}
 	return($author);
 }
+
 /**
- * gets the Author by profile id
+ * gets all authors
  *
  * @param \PDO $pdo PDO connection object
- * @param Uuid|string $authorProfileId profile id to search by
- * @return \SplFixedArray SplFixedArray of Tweets found
+ * @return \SplFixedArray SplFixedArray of authors found or null if not found
+ *
  * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError when variables are not the correct data type
  **/
-public static function getAuthorByTweetProfileId(\PDO $pdo, $authorProfileId) : \SplFixedArray {
-
-	try {
-		$authorProfileId = self::validateUuid($authorProfileId);
-	} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
-		throw(new \PDOException($exception->getMessage(), 0, $exception));
-	}
-
+public static function getAllAuthors(PDO $pdo) : \SplFixedArray {
 	// create query template
 	$query = "SELECT authorId, authorProfileId, authorContent, authorDate FROM author WHERE authorProfileId = :authorProfileId";
+
 	$statement = $pdo->prepare($query);
-	// bind the author profile id to the place holder in the template
-	$parameters = ["authorProfileId" => $authorProfileId->getBytes()];
-	$statement->execute($parameters);
-	// build an array of authors
+	$statement->execute();
+
+	//build an array of authors
 	$authors = new \SplFixedArray($statement->rowCount());
 	$statement->setFetchMode(\PDO::FETCH_ASSOC);
 	while(($row = $statement->fetch()) !== false) {
 		try {
 			$author = new Author($row["authorId"], $row["authorProfileId"], $row["authorContent"], $row["authorDate"]);
-			$tauthor[$author->key()] = $author;
+			$author[$authors->key()] = $author;
 			$authors->next();
 		} catch(\Exception $exception) {
 			// if the row couldn't be converted, rethrow it
@@ -385,6 +387,7 @@ public static function getAuthorByTweetProfileId(\PDO $pdo, $authorProfileId) : 
 		}
 	}
 	return($authors);
+}
 }
 
 
