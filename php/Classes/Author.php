@@ -334,7 +334,7 @@ public static function getAuthorByAuthorId($authorId) : ?Author {
 		throw(new \PDOException($exception->getMessage(), 0, $exception));
 	}
 	// create query template
-	$query = "SELECT aurthorId, authorProfileId, authorContent, authorDate FROM author WHERE autghorId = :authorId";
+	$query = "SELECT authorId, authorProfileId, authorContent, authorDate FROM author WHERE authorId = :authorId";
 
 	$statement = $pdo->prepare($query);
 
